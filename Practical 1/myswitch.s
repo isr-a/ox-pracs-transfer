@@ -1,5 +1,6 @@
 .data
 .globL jmptable
+.globl main
 jmptable: 
 	.quad case0
 	.quad case1
@@ -11,7 +12,7 @@ calculate:
 	andl $3, %edx
 switchtable:
 	addl jmptable, %edx
-	jmp EDX
+	jmp *(%edx)
 case0:
 	addq %rdi, %rsi
 	movq %rsi, %rax
@@ -30,3 +31,7 @@ end:
 	movq %rbp, %rsp
 	pop %rbp
 	ret
+main:
+	movq $9, %rdi
+	movq $3, %rsi
+	movl $1, %edx
