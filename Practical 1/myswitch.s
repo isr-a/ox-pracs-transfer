@@ -35,3 +35,5 @@ main:
 	movq $9, %rdi
 	movq $3, %rsi
 	movl $1, %edx
+	call calculate
+	HLT
