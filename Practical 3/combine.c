@@ -9,10 +9,10 @@
 
 // These define the operator, the idempotent value of that operator, the function to be tested, and the data type to be tested.
 
-#define OP +
-#define IDENT 0
+#define OP *
+#define IDENT 1
 #define TYPE long
-#define COMBINE combine1
+#define COMBINE combine68
 
 // Set this to the clock frequency of your processor.
 
@@ -84,6 +84,11 @@ int get_vec_element(vec_ptr v, long index, data_t *dest) {
 
 }
 
+data_t *get_vec_start(vec_ptr v) {
+    data_t* first = v->data;
+    return first;
+}
+
 // Function to return the length of the vector.
 
 long vec_length(vec_ptr v) {
@@ -102,6 +107,162 @@ void combine1(vec_ptr v, data_t *dest) {
         *dest = *dest OP val;
     }
 
+}
+
+void combine2(vec_ptr v, data_t *dest) {
+
+    long i;
+    *dest = IDENT;
+    long len = vec_length(v);
+    for (i = 0; i < len; i += 1) {
+        data_t val;
+        get_vec_element(v, i, &val);
+        *dest = *dest OP val;
+    }
+}
+
+void combine3(vec_ptr v, data_t *dest) {
+
+    long i;
+    *dest = IDENT;
+    long len = vec_length(v);
+    data_t *val = get_vec_start(v);
+    for (i = 0; i < len; i += 1) {
+        *dest = *dest OP *val;
+        val += 1; 
+    }
+}
+
+void combine4(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE temp = IDENT;
+    long len = vec_length(v);
+    data_t *val = get_vec_start(v);
+    for (i = 0; i < len; i += 1) {
+        temp = temp OP *val;
+        val += 1; 
+    }
+    *dest = temp;
+}
+
+void combine52(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE acc = IDENT;
+    long len = vec_length(v);
+    long limit = len - 1;
+    data_t *data = get_vec_start(v);
+    for (i = 0; i < limit; i += 2) {
+        acc = acc OP data[i] OP data[i+1];
+    }
+    for (; i < len; i+= 1) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+}
+
+void combine54(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE acc = IDENT;
+    long len = vec_length(v);
+    long limit = len - 3;
+    data_t *data = get_vec_start(v);
+    for (i = 0; i < limit; i += 4) {
+        acc = acc OP data[i] OP data[i+1] OP data[i+2] OP data[i+3];
+    }
+    for (; i < len; i+= 1) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+}
+
+void combine58(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE acc = IDENT;
+    long len = vec_length(v);
+    long limit = len - 7;
+    data_t *data = get_vec_start(v);
+    for (i = 0; i < limit; i += 8) {
+        acc = acc OP data[i] OP data[i+1] OP data[i+2] OP data[i+3];
+        acc = acc OP data[i+4] OP data[i+5] OP data[i+6] OP data[i+7];
+    }
+    for (; i < len; i+= 1) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+}
+
+void combine62(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE acc1 = IDENT;
+    TYPE acc2 = IDENT;
+    long len = vec_length(v);
+    long limit = len - 1;
+    data_t *data = get_vec_start(v);
+    for (i = 0; i < limit; i += 2) {
+        acc1 = acc1 OP data[i];
+        acc2 = acc2 OP data[i+1];
+    }
+    for (; i < len; i+= 1) {
+        acc1 = acc1 OP data[i];
+    }
+    *dest = acc1 OP acc2 ;
+}
+
+void combine64(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE acc1 = IDENT;
+    TYPE acc2 = IDENT;
+    TYPE acc3 = IDENT;
+    TYPE acc4 = IDENT;
+    long len = vec_length(v);
+    long limit = len - 3;
+    data_t *data = get_vec_start(v);
+    for (i = 0; i < limit; i += 4) {
+        acc1 = acc1 OP data[i];
+        acc2 = acc2 OP data[i+1];
+        acc3 = acc3 OP data[i+2];
+        acc4 = acc4 OP data[i+3];
+    }
+    for (; i < len; i+= 1) {
+        acc1 = acc1 OP data[i];
+    }
+    *dest = acc1 OP acc2 OP acc3 OP acc4;
+}
+
+void combine68(vec_ptr v, data_t *dest) {
+
+    long i;
+    TYPE acc1 = IDENT;
+    TYPE acc2 = IDENT;
+    TYPE acc3 = IDENT;
+    TYPE acc4 = IDENT;
+    TYPE acc5 = IDENT;
+    TYPE acc6 = IDENT;
+    TYPE acc7 = IDENT;
+    TYPE acc8 = IDENT;
+    long len = vec_length(v);
+    long limit = len - 7;
+    data_t *data = get_vec_start(v);
+    for (i = 0; i < limit; i += 8) {
+        acc1 = acc1 OP data[i];
+        acc2 = acc2 OP data[i+1];
+        acc3 = acc3 OP data[i+2];
+        acc4 = acc4 OP data[i+3];
+        acc5 = acc5 OP data[i+4];
+        acc6 = acc6 OP data[i+5];
+        acc7 = acc7 OP data[i+6];
+        acc8 = acc8 OP data[i+7];
+    }
+    for (; i < len; i+= 1) {
+        acc1 = acc1 OP data[i];
+    }
+    *dest = acc1 OP acc2 OP acc3 OP acc4 OP acc5 OP acc6 OP acc7 OP acc8;
 }
 
 // Function to repeatedly call a function, measuring its execution time in cycles.
